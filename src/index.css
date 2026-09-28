@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bangers", Impact, sans-serif;
+  --font-body: "Zen Kaku Gothic New", system-ui, sans-serif;
+}
+
+.halftone {
+  background-image: radial-gradient(#000 1.2px, transparent 1.6px);
+  background-size: 9px 9px;
+}
+
+.speed-lines {
+  background: repeating-conic-gradient(#000 0deg 1.2deg, #fff 1.2deg 5deg);
+  mask-image: radial-gradient(circle, transparent 22%, #000 75%);
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+.outline-text {
+  color: #fff;
+  -webkit-text-stroke: 3px #000;
+  paint-order: stroke fill;
+}
+
+@keyframes slam {
+  0%   { transform: scale(2.4) rotate(-6deg); opacity: 0; }
+  60%  { transform: scale(0.96) rotate(-2deg); opacity: 1; }
+  100% { transform: scale(1) rotate(-2deg); opacity: 1; }
+}
+.slam { animation: slam 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slam { animation: none; }
+}
+
+:focus-visible { outline: 4px solid #000; outline-offset: 3px; }
