@@ -8,11 +8,14 @@ export default function Hero() {
           Yrbre
         </h1>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <a href="#project" className="border-4 border-black bg-black px-6 py-3 font-black text-white shadow-[5px_5px_0_#000] transition hover:-translate-y-0.5 hover:bg-white hover:text-black">
-                Lihat Proyek
+            <a href="#about" className="border-4 border-black bg-black px-6 py-3 font-black text-white shadow-[5px_5px_0_#000] transition hover:-translate-y-0.5 hover:bg-white hover:text-black">
+                ABOUT ME
             </a>
-            <a href="#kontak" className="border-4 border-black bg-black px-6 py-3 font-black text-white shadow-[5px_5px_0_#000] transition hover:-translate-y-0.5 hover:bg-white hover:text-black">
-                Kontak Saya
+            <a href="#skills" className="border-4 border-black bg-black px-6 py-3 font-black text-white shadow-[5px_5px_0_#000] transition hover:-translate-y-0.5 hover:bg-white hover:text-black">
+                SKILLS
+            </a>
+            <a href="#project" className="border-4 border-black bg-black px-6 py-3 font-black text-white shadow-[5px_5px_0_#000] transition hover:-translate-y-0.5 hover:bg-white hover:text-black">
+                PROJECTS
             </a>
             </div>
       </div>
