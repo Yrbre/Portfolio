@@ -21,7 +21,7 @@ body {
 
 .outline-text {
   color: #fff;
-  -webkit-text-stroke: 3px #000;
+  -webkit-text-stroke: 6px #000000;
   paint-order: stroke fill;
 }
 
@@ -37,3 +37,17 @@ body {
 }
 
 :focus-visible { outline: 4px solid #000; outline-offset: 3px; }
+
+.bubble { position: relative; }
+.bubble::after {
+  content: "";
+  position: absolute;
+  left: 2.5rem;
+  bottom: -26px;
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border-right: 4px solid #000;
+  border-bottom: 4px solid #000;
+  transform: rotate(45deg) skew(12deg, 12deg);
+}
