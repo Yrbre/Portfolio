@@ -1,18 +1,21 @@
-import Hero from './components/Hero'
-import About from './components/About'
+import Nav from "./components/Nav";
+import Hero from "./components/Hero";
+import About from "./components/About";
 import Skills from "./components/Skills";
-import './App.css'
+import Projects from "./components/Projects";
+import Footer from "./components/Footer";
 
-function App() {
-  
-
+export default function App() {
   return (
     <>
-      <Hero />
-      <About />
-      <Skills />
+      <Nav />
+      <main>
+        <Hero />
+        <About />
+        <Skills />
+        <Projects />
+      </main>
+      <Footer />
     </>
-  )
+  );
 }
-
-export default App

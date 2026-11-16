@@ -3,26 +3,86 @@
 @theme {
   --font-display: "Bangers", Impact, sans-serif;
   --font-body: "Zen Kaku Gothic New", system-ui, sans-serif;
+
+  /* Palet manga: kertas hangat, tinta off-black, satu aksen merah tinta */
+  --color-paper: #f4f1ea;
+  --color-ink: #161514;
+  --color-accent: #c23a2b;
+
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.halftone {
-  background-image: radial-gradient(#000 1.2px, transparent 1.6px);
-  background-size: 9px 9px;
-}
-
-.speed-lines {
-  background: repeating-conic-gradient(#000 0deg 1.2deg, #fff 1.2deg 5deg);
-  mask-image: radial-gradient(circle, transparent 22%, #000 75%);
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-body);
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+/* Tekstur kertas: fixed + pointer-events-none supaya tidak repaint saat scroll */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.halftone {
+  background-image: radial-gradient(var(--color-ink) 1.2px, transparent 1.6px);
+  background-size: 9px 9px;
+}
+
+.halftone-fade {
+  mask-image: linear-gradient(to bottom right, #000 0%, transparent 70%);
+}
+
+.speed-lines {
+  background: repeating-conic-gradient(
+    from 0deg at 70% 50%,
+    var(--color-ink) 0deg 1.2deg,
+    transparent 1.2deg 5deg
+  );
+  mask-image: radial-gradient(circle at 70% 50%, transparent 28%, #000 85%);
+  opacity: 0.16;
 }
 
 .outline-text {
-  color: #fff;
-  -webkit-text-stroke: 6px #000000;
+  color: var(--color-paper);
+  -webkit-text-stroke: 6px var(--color-ink);
   paint-order: stroke fill;
+}
+
+/* Panel manga: border tinta + bayangan solid */
+.panel {
+  border: 4px solid var(--color-ink);
+  background: #fff;
+  box-shadow: 8px 8px 0 var(--color-ink);
+}
+
+/* Tombol: hover terangkat, active "ditekan" ke bayangan */
+.btn-ink {
+  border: 4px solid var(--color-ink);
+  box-shadow: 5px 5px 0 var(--color-ink);
+  transition:
+    transform 0.3s var(--ease-snap),
+    box-shadow 0.3s var(--ease-snap),
+    background-color 0.2s,
+    color 0.2s;
+}
+.btn-ink:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--color-ink);
+}
+.btn-ink:active {
+  transform: translate(4px, 4px);
+  box-shadow: 1px 1px 0 var(--color-ink);
+  transition-duration: 0.08s;
 }
 
 @keyframes slam {
@@ -32,22 +92,79 @@ body {
 }
 .slam { animation: slam 1.5s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
 
-@media (prefers-reduced-motion: reduce) {
-  .slam { animation: none; }
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50%      { transform: translateY(-8px) rotate(var(--r, 0deg)); }
+}
+.float { animation: float 4.5s ease-in-out infinite; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee { animation: marquee 28s linear infinite; }
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.6); opacity: 0.35; }
+}
+.pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
+
+/* Reveal saat scroll: kelas .is-visible dipasang oleh useReveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s var(--ease-snap),
+    transform 0.7s var(--ease-snap);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
-:focus-visible { outline: 4px solid #000; outline-offset: 3px; }
+/* Bar skill terisi berurutan saat terlihat */
+.seg {
+  transform: scaleY(0.15);
+  transform-origin: bottom;
+  transition: transform 0.45s var(--ease-snap);
+  transition-delay: calc(var(--i, 0) * 70ms + var(--d, 0ms));
+}
+.is-visible .seg {
+  transform: none;
+}
 
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .slam, .float, .marquee, .pulse-dot { animation: none; }
+  .reveal, .seg { opacity: 1; transform: none; transition: none; }
+}
+
+:focus-visible {
+  outline: 4px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Balon dialog dengan ekor */
 .bubble { position: relative; }
 .bubble::after {
   content: "";
   position: absolute;
   left: 2.5rem;
-  bottom: -26px;
+  bottom: -19px;
   width: 30px;
   height: 30px;
   background: #fff;
-  border-right: 4px solid #000;
-  border-bottom: 4px solid #000;
+  border-right: 4px solid var(--color-ink);
+  border-bottom: 4px solid var(--color-ink);
   transform: rotate(45deg) skew(12deg, 12deg);
+}
+@media (min-width: 768px) {
+  .bubble-left::after {
+    left: -19px;
+    top: 2.5rem;
+    bottom: auto;
+    transform: rotate(135deg) skew(12deg, 12deg);
+  }
 }
